@@ -57,8 +57,9 @@ Para que podamos utilizar este secreto en AWS Batch, tenemos que hacer las sigui
     - HOP_ENVIRONMENT_CONFIG_FILE_NAME_PATHS=${PROJECT_HOME}/config/env-config.json
     ```
 3. Agregar un secreto a la definición del trabajo:
+    ```
     - CONFIG_FILE=arn:aws:secretsmanager:*region_a_utilizar*:*numero_de_cuenta*:secret:*id_del_secreto*
-
+    ```
 Por otro lado, si necesitamos drivers JDBC (generalmente serán archivos .jar) en nuestros pipelines, el Dockerfile.entornos contiene una instrucción que se encarga de copiarlos desde nuestro entorno local al contenedor.
 Luego, en la definición del trabajo en AWS Batch, agregamos la variable de entorno:
     ```    
