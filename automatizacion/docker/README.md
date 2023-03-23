@@ -31,7 +31,7 @@ docker run -it --rm \
 
 Para más detalle de este ejemplo y de las variables de entorno que utiliza, visitar [esta documentación](https://hop.apache.org/tech-manual/latest/docker-container.html). 
 
-7. Para automatizar la ejecución, podemos utilizar el servicio AWS Batch que nos permite ejecutar imagenes de docker, en este caso de Hop, en un entorno sin servidor. Para ello seguiremos los pasos de (este tutorial)[https://docs.aws.amazon.com/batch/latest/userguide/Batch_GetStarted.html] teniendo en cuenta las siguientes consideraciones:
+7. Para automatizar la ejecución, podemos utilizar el servicio AWS Batch que nos permite ejecutar imagenes de docker, en este caso de Hop, en un entorno sin servidor. Para ello seguiremos los pasos de [este tutorial](https://docs.aws.amazon.com/batch/latest/userguide/Batch_GetStarted.html) teniendo en cuenta las siguientes consideraciones:
     - Utilizar Fargate como motor de orquestación, en particular instancias Spot.
     - En imagen completar con la URI cuando se hizo el push: *numero_de_cuenta*.dkr.ecr.*region_a_utilizar*.amazonaws.com/hop:2.3
     - En comando no es necesario ingresar ningún valor, ya que la imagen es la que se encarga de ejecutar Hop.
