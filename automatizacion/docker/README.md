@@ -37,7 +37,30 @@ Para más detalle de este ejemplo y de las variables de entorno que utiliza, vis
     - En comando no es necesario ingresar ningún valor, ya que la imagen es la que se encarga de ejecutar Hop.
     - Utilizar 1 vCPU y 2 GB de memoria.
     - Agregar las mismas variables de entorno que en el punto anterior, para HOP_FILE_PATH borrar las comillas simples.
+    - El contenedor tiene que tener IP pública asignada para poder descargar la imagen de ECR.
     
 8. Si el trabajo ejecutó correctamente, en la pestaña de Registros veremos el log de Hop igual a la salida del comando docker del punto anterior.
 
 9. Finalmente, podríamos invocar AWS Batch desde otro servicio, como puede ser Step Functions, utilizando la misma configuración de trabajo del punto anterior.
+
+## Ejecución con archivo de entorno y drivers JDBC
+
+Cuando configuramos [entornos](https://hop.apache.org/manual/latest/projects/index.html#_environments) en Hop para manejar de manera ordenada cuestiones como credenciales de conexión a bases de datos, Hop genera un archivo JSON.
+Dado que estos tienen información sensible, lo ideal es utilizar servicios para administrarlos. En AWS utilizaremos [Secrets Manager](https://docs.aws.amazon.com/batch/latest/userguide/specifying-sensitive-data-secrets.html).
+
+Para que podamos utilizar este secreto en AWS Batch, tenemos que hacer las siguientes modificaciones al paso a paso anterior:
+
+1. Generar y subir una nueva imagen utilizando el archivo Dockerfile.entornos. Este archivo copia el script `clone-git-repo-and-secret.sh` que, además de clonar el repositorio indicado, vuelca el contenido del secret a un archivo. El secret está disponible en el contenedor como una variable de entorno.
+2. Agregar las siguientes variables de entorno a la definición del trabajo:
+    ```
+    - HOP_ENVIRONMENT_NAME
+    - HOP_ENVIRONMENT_CONFIG_FILE_NAME_PATHS=${PROJECT_HOME}/config/env-config.json
+    ```
+3. Agregar un secreto a la definición del trabajo:
+    - CONFIG_FILE=arn:aws:secretsmanager:*region_a_utilizar*:*numero_de_cuenta*:secret:*id_del_secreto*
+
+Por otro lado, si necesitamos drivers JDBC (generalmente serán archivos .jar) en nuestros pipelines, el Dockerfile.entornos contiene una instrucción que se encarga de copiarlos desde nuestro entorno local al contenedor.
+Luego, en la definición del trabajo en AWS Batch, agregamos la variable de entorno:
+    ```    
+    - HOP_SHARED_JDBC_FOLDER=/home/hop/drivers
+    ```
