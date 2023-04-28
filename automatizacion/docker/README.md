@@ -6,7 +6,7 @@ Para ejecutar un proceso desde un contenedor de Docker, podemos seguir los sigui
 2. Una vez listo el entorno, utilizamos la interfaz de git para clonar este repositrio.
 3. Luego, actualizamos el cliente de línea de comandos de AWS siguiendo [estas](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) instrucciones.
 4. Generamos la imagen de docker con el Dockerfile ubicado en automatizacion/docker, esto ejecutando el siguiente comando desde una terminal: ```docker build -t hop:2.3 -f Dockerfile .```
-5. Una vez que tenemos la imagen en el entorno, la subimos al servicio de registro de contenedores AWS ECR, para ello tenemos que ejecutar los siguientes comandos, reemplazando *region_a_utilizar* y *numero_de_cuenta* según corresponda:
+5. Una vez que tenemos la imagen en el entorno, la subimos al servicio de registro de contenedores AWS ECR, para ello tenemos que ejecutar los siguientes comandos, reemplazando *region_a_utilizar* y *numero_de_cuenta* según corresponda. Antes de ejecutar los comandos debemos crear el repositorio *hop* en la consola de ECR:
 
 ```
 aws ecr get-login-password --region *region_a_utilizar* | docker login --username AWS --password-stdin *numero_de_cuenta*.dkr.ecr.*region_a_utilizar*.amazonaws.com
